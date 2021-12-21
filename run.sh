@@ -8,4 +8,4 @@ NAME="jmeter"
 IMAGE="docker.io/apachejmeter-s390x:5.1.1"
 
 # Finally run
-docker run --rm --name ${NAME} --network host -i -v ${PWD}:${PWD} -w ${PWD} ${IMAGE} $@
+podman run --rm --name ${NAME} --network host -i -v ${PWD}:${PWD} -w ${PWD} ${IMAGE} $@
