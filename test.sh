@@ -1,19 +1,11 @@
 #!/bin/bash
-#
-# Test the JMeter Docker image using a trivial test plan.
 
-# Example for using User Defined Variables with JMeter
-# These will be substituted in JMX test script
-# See also: http://stackoverflow.com/questions/14317715/jmeter-changing-user-defined-variables-from-command-line
-export TARGET_HOST="localhost"
-export TARGET_PORT="8080"
-export TARGET_PATH="/"
-export THREADS="20"
-export RAMD_UP="40"
-export DURATION="60"
-export SETUP_DELAY="5"
+NAME="jmeter"
+JMETER=${JMETER:-"docker.io/kaichu1016/jmeter"}
+JMETER_VERSION=${JMETER_VERSION:-"latest"}
+IMAGE="${JMETER}:${JMETER_VERSION}"
 
-T_DIR=tests
+T_DIR=./tests
 
 # Reporting dir: start fresh
 R_DIR=${T_DIR}/report
@@ -22,7 +14,8 @@ mkdir -p ${R_DIR}
 
 /bin/rm -f ${T_DIR}/stresstest.jtl ${T_DIR}/jmeter.log  > /dev/null 2>&1
 
-./run.sh -Dlog_level.jmeter=DEBUG \
+podman run --rm --name ${NAME} --network host -i -v ${PWD}:${PWD} -w ${PWD} ${IMAGE} \
+	${T_DIR}/stresstest.jmx -l ${T_DIR}/stresstest.jtl -j ${T_DIR}/jmeter.log \
 	-JTARGET_HOST=${TARGET_HOST} \
 	-JTARGET_PORT=${TARGET_PORT} \
 	-JTARGET_PATH=${TARGET_PATH} \
@@ -30,14 +23,13 @@ mkdir -p ${R_DIR}
 	-JRAMD_UP=${RAMD_UP} \
 	-JDURATION=${DURATION} \
 	-JSETUP_DELAY=${SETUP_DELAY} \
-	${T_DIR}/stresstest.jmx -l ${T_DIR}/stresstest.jtl -j ${T_DIR}/jmeter.log \
-	-e -o ${R_DIR}
+	-o ${R_DIR} -e
 
 echo "==== jmeter.log ===="
-cat ${T_DIR}/jmeter.log
+echo "See jmeter log in ${T_DIR}/jmeter.log"
 
 echo "==== Raw Test Report ===="
-cat ${T_DIR}/stresstest.jtl
+echo "See Raw test report in ${T_DIR}/stresstest.jtl"
 
 echo "==== HTML Test Report ===="
 echo "See HTML test report in ${R_DIR}/index.html"
