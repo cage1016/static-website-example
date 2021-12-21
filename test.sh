@@ -24,13 +24,13 @@ mkdir -p ${R_DIR}
 
 ./run.sh -Dlog_level.jmeter=DEBUG \
 	-JTARGET_HOST=${TARGET_HOST} \
-    -JTARGET_PORT=${TARGET_PORT} \
+	-JTARGET_PORT=${TARGET_PORT} \
 	-JTARGET_PATH=${TARGET_PATH} \
 	-JTHREADS=${THREADS} \
 	-JRAMD_UP=${RAMD_UP} \
 	-JDURATION=${DURATION} \
 	-JSETUP_DELAY=${SETUP_DELAY} \
-	-n -t ${T_DIR}/stresstest.jmx -l ${T_DIR}/stresstest.jtl -j ${T_DIR}/jmeter.log \
+	${T_DIR}/stresstest.jmx -l ${T_DIR}/stresstest.jtl -j ${T_DIR}/jmeter.log \
 	-e -o ${R_DIR}
 
 echo "==== jmeter.log ===="
