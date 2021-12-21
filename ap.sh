@@ -12,10 +12,10 @@ R_DIR=${T_DIR}/report
 rm -rf ${R_DIR} > /dev/null 2>&1
 mkdir -p ${R_DIR}
 
-/bin/rm -f ${T_DIR}/stresstest.jtl ${T_DIR}/jmeter.log  > /dev/null 2>&1
+/bin/rm -f ${T_DIR}/ap.jtl ${T_DIR}/jmeter.log ${T_DIR}/${TARGET_HOST}-${TARGET_PORT}.tar.gz > /dev/null 2>&1
 
 podman run --rm --name ${NAME} --network host -i -v ${PWD}:${PWD} -w ${PWD} ${IMAGE} \
-	${T_DIR}/stresstest.jmx -l ${T_DIR}/stresstest.jtl -j ${T_DIR}/jmeter.log \
+	${T_DIR}/ap.jmx -l ${T_DIR}/ap.jtl -j ${T_DIR}/jmeter.log \
 	-JTARGET_HOST=${TARGET_HOST} \
 	-JTARGET_PORT=${TARGET_PORT} \
 	-JTARGET_PATH=${TARGET_PATH} \
@@ -29,7 +29,11 @@ echo "==== jmeter.log ===="
 echo "See jmeter log in ${T_DIR}/jmeter.log"
 
 echo "==== Raw Test Report ===="
-echo "See Raw test report in ${T_DIR}/stresstest.jtl"
+echo "See Raw test report in ${T_DIR}/ap.jtl"
 
 echo "==== HTML Test Report ===="
 echo "See HTML test report in ${R_DIR}/index.html"
+
+echo "==== Tar report ===="
+tar czf ${T_DIR}/${TARGET_HOST}-${TARGET_PORT}.tar.gz ${T_DIR}/jmeter.log ${T_DIR}/ap.jtl ${R_DIR}
+echo "See Tar file in ${T_DIR}/${TARGET_HOST}-${TARGET_PORT}.tar.gz"
