@@ -22,4 +22,28 @@ build-s390x: ## build s390x nginx docker
 help: ## this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_0-9-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
 
+.PHONY: run
+run: ## run 
+	JMETER="docker.io/kaichu1016/jmeter" \
+	JMETER_VERSION="5.4.2" \
+	TARGET_HOST="192.168.1.201" \
+	TARGET_PORT="8080" \
+	TARGET_PATH="/" \
+	THREADS="2" \
+	RAMD_UP="4" \
+	DURATION="10" \
+	SETUP_DELAY="2" \
+	./test2.sh
+
+.PHONY: pull
+pull:
+	git fetch --all
+	git reset --hard origin/master
+
+.PHONY: push
+push:
+	git add .
+	git commit --amend --no-edit
+	git push -f
+
 .DEFAULT_GOAL := help
