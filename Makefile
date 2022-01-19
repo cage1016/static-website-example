@@ -1,15 +1,15 @@
-.PHONY: build-x86
-build-x86: ## build x86 nginx docker
-	BASE_IMAGE=nginx:1.20.2-alpine \
+.PHONY: build-amd64
+build-amd64: ## build amd64 nginx docker
+	BASE_IMAGE=amd64/nginx:1.20.2-alpine \
 	CONFIG_FILE=default.conf.gz \
 	IMAGE=ghcr.io/cage1016/nginx-website-gz \
-	VERSION=0.1.0 \
+	VERSION=0.1.0-amd64 \
 	./build.sh
 
-	BASE_IMAGE=nginx:1.20.2-alpine \
+	BASE_IMAGE=amd64/nginx:1.20.2-alpine \
 	CONFIG_FILE=default.conf \
 	IMAGE=ghcr.io/cage1016/nginx-website \
-	VERSION=0.1.0 \
+	VERSION=0.1.0-amd64 \
 	./build.sh
 
 # .PHONY: build-ppc64le
@@ -23,15 +23,15 @@ build-s390x: ## build s390x nginx docker
 	DAEMON=podman \	
 	BASE_IMAGE=s390x/nginx:1.20.2-alpine \
 	CONFIG_FILE=default.conf.gz \
-	IMAGE=ghcr.io/cage1016/nginx-website-gz-s390x \
-	VERSION=0.1.0 \
+	IMAGE=ghcr.io/cage1016/nginx-website-gz \
+	VERSION=0.1.0-s390x \
 	./build.sh
 
 	DAEMON=podman \
 	BASE_IMAGE=s390x/nginx:1.20.2-alpine \
 	CONFIG_FILE=default.conf \
-	IMAGE=ghcr.io/cage1016/nginx-website-s390x \
-	VERSION=0.1.0 \
+	IMAGE=ghcr.io/cage1016/nginx-website \
+	VERSION=0.1.0-s390x \
 	./build.sh
 
 .PHONY: help
